@@ -4,7 +4,7 @@
 
 A lightweight, single-file documentation hub designed for our hackathon team. This site provides quick access to "copy-paste" code patterns, architectural mental models, and technical guides for winning AI hackathons.
 
-**[View Live Site](https://www.google.com/search?q=https://your-username.github.io/your-repo-name)** _(Update this link after enabling Pages)_
+**[View Live Site](https://mattofficial.github.io/ai-hackathon-guide/)**
 
 ## 📋 What's Inside?
 
