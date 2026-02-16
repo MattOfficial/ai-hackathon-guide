@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Hackathon Quick Guide</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #2563eb; /* Royal Blue */
+        --primary-light: #eff6ff;
+        --secondary: #475569; /* Slate */
+        --bg: #f8fafc; /* Light Gray Background */
+        --surface: #ffffff; /* White Cards */
+        --text-main: #0f172a; /* Dark Text */
+        --text-sec: #64748b; /* Muted Text */
+        --border: #e2e8f0; /* Light Border */
+        --code-bg: #1e293b; /* Dark Code Background */
+        --accent: #10b981; /* Emerald Green for tips */
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text-main);
+        line-height: 1.6;
+        font-family: "Inter", sans-serif;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      /* --- Navigation --- */
+      nav {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+      }
+      .logo {
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: var(--primary);
+        letter-spacing: -0.5px;
+      }
+      .tabs {
+        display: flex;
+        height: 100%;
+        gap: 1.5rem;
+        overflow-x: auto; /* Handle mobile scroll */
+      }
+      .tab-btn {
+        background: none;
+        border: none;
+        height: 100%;
+        border-bottom: 3px solid transparent;
+        cursor: pointer;
+        color: var(--text-sec);
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        padding: 0 4px;
+        white-space: nowrap;
+      }
+      .tab-btn:hover {
+        color: var(--primary);
+      }
+      .tab-btn.active {
+        border-bottom-color: var(--primary);
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      /* --- Main Content Area --- */
+      main {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 2rem 1rem;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding-bottom: 3rem;
+      }
+
+      .tab-content {
+        display: none;
+        animation: fadeIn 0.4s ease;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* --- Typography --- */
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-main);
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        font-size: 1.4rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--text-main);
+        font-weight: 700;
+      }
+      h3 {
+        font-size: 1.1rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-main);
+        font-weight: 600;
+      }
+      p {
+        margin-bottom: 1rem;
+        color: var(--secondary);
+        max-width: 70ch;
+      }
+
+      /* --- Links & Resources --- */
+      .resource-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        margin-right: 1rem;
+        margin-bottom: 0.5rem;
+        background: var(--primary-light);
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+      }
+      .resource-link:hover {
+        background: #dbeafe;
+      }
+
+      /* --- Cards --- */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+      .card {
+        background: var(--surface);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        cursor: pointer;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary);
+      }
+      .card-title {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--primary);
+        font-size: 1.1rem;
+      }
+      .card-desc {
+        font-size: 0.9rem;
+        color: var(--text-sec);
+      }
+
+      /* --- Code Blocks --- */
+      pre {
+        background: var(--code-bg);
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.9rem;
+        margin: 1.5rem 0;
+        border: 1px solid #334155;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      code {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* Syntax Highlighting (Simulated) */
+      .c-kw {
+        color: #c678dd;
+      } /* Keyword (Purple) */
+      .c-str {
+        color: #98c379;
+      } /* String (Green) */
+      .c-cmt {
+        color: #5c6370;
+        font-style: italic;
+      } /* Comment (Grey) */
+      .c-fn {
+        color: #61afef;
+      } /* Function (Blue) */
+      .c-cls {
+        color: #e5c07b;
+      } /* Class (Yellow) */
+
+      /* --- Alerts/Boxes --- */
+      .box {
+        padding: 1.25rem;
+        border-radius: 8px;
+        margin: 1.5rem 0;
+        font-size: 0.95rem;
+      }
+      .box-tip {
+        background: #ecfdf5;
+        border-left: 4px solid #10b981;
+        color: #064e3b;
+      }
+      .box-warn {
+        background: #fff1f2;
+        border-left: 4px solid #f43f5e;
+        color: #881337;
+      }
+      .box-info {
+        background: #eff6ff;
+        border-left: 4px solid #3b82f6;
+        color: #1e3a8a;
+      }
+
+      .system-diagram {
+        background: white;
+        border: 1px dashed var(--border);
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+        margin: 2rem 0;
+        color: var(--text-sec);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-container">
+        <div class="logo">🚀 AI Hackathon Quick Guide</div>
+        <div class="tabs">
+          <button class="tab-btn active" onclick="openTab('home')">
+            Start Here
+          </button>
+          <button class="tab-btn" onclick="openTab('prompt')">Prompting</button>
+          <button class="tab-btn" onclick="openTab('rag')">RAG</button>
+          <button class="tab-btn" onclick="openTab('langgraph')">
+            LangGraph
+          </button>
+          <button class="tab-btn" onclick="openTab('solution')">
+            Example Solution
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <div id="home" class="tab-content active">
+        <div class="container">
+          <span
+            style="
+              text-transform: uppercase;
+              font-size: 0.75rem;
+              font-weight: 700;
+              color: var(--primary);
+              letter-spacing: 0.05em;
+            "
+            >Team Resources</span
+          >
+          <h1>Hackathon Survival Kit</h1>
+          <p>
+            Welcome to the team documentation. This guide cuts through the hype
+            and provides the specific code patterns, mental models, and
+            copy-paste snippets we need to win.
+          </p>
+
+          <div class="box box-info">
+            <strong>Goal:</strong> Build deterministic, reliable systems. Not
+            just "chatbots".
+          </div>
+
+          <h2 style="margin-top: 1rem">Core Technologies</h2>
+          <div class="grid">
+            <div class="card" onclick="openTab('prompt')">
+              <div class="card-title">Prompt Engineering</div>
+              <div class="card-desc">
+                How to speak to the model using XML, JSON enforcement, and
+                System Prompts.
+              </div>
+            </div>
+            <div class="card" onclick="openTab('rag')">
+              <div class="card-title">RAG (Retrieval)</div>
+              <div class="card-desc">
+                Connecting the AI to our private data (PDFs, Docs) without
+                hallucinations.
+              </div>
+            </div>
+            <div class="card" onclick="openTab('langgraph')">
+              <div class="card-title">LangGraph</div>
+              <div class="card-desc">
+                Building "Agents" that can loop, retry errors, and use tools
+                autonomously.
+              </div>
+            </div>
+            <div class="card" onclick="openTab('solution')">
+              <div class="card-title">Example Solution</div>
+              <div class="card-desc">
+                <b>Earnings Call Agent:</b> A full system design breakdown of a
+                sample problem.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="prompt" class="tab-content">
+        <div class="container">
+          <h1>Prompt Engineering</h1>
+          <p>
+            Prompting is not about being polite. It is about <b>Context</b>,
+            <b>Constraint</b>, and <b>Format</b>.
+          </p>
+
+          <div style="margin-bottom: 2rem">
+            <a
+              href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+              target="_blank"
+              class="resource-link"
+              >📚 Anthropic Guide (Best for Theory)</a
+            >
+            <a
+              href="https://platform.openai.com/docs/guides/prompt-engineering"
+              target="_blank"
+              class="resource-link"
+              >📚 OpenAI Guide (Best for Tactics)</a
+            >
+          </div>
+
+          <h2>1. The Setup (Boilerplate)</h2>
+          <p>Use this configuration for our specific Hackathon environment:</p>
+          <pre><code class="language-python"><span class="c-kw">from</span> langchain_openai <span class="c-kw">import</span> ChatOpenAI
+<span class="c-kw">import</span> httpx
+
+<span class="c-cmt"># We use httpx to handle specific network configs (SSL verification off for internal labs)</span>
+client = httpx.Client(verify=<span class="c-kw">False</span>)
+
+llm = ChatOpenAI(
+    base_url=<span class="c-str">YOUR URL</span>,
+    model=<span class="c-str">YOUR MODEL NAME</span>,
+    api_key=<span class="c-str">"YOUR_API_KEY"</span>,
+    http_client=client
+)</code></pre>
+
+          <h2>2. Theory: "Chain of Thought"</h2>
+          <p>
+            Models are bad at logic if you ask them to answer immediately. You
+            must force them to "think" first. This increases accuracy by ~40%.
+          </p>
+
+          <div class="box box-tip">
+            <strong>Technique:</strong> Ask the model to generate a
+            <code>&lt;thinking&gt;</code> block before the JSON output.
+          </div>
+
+          <pre><code class="language-python">prompt = <span class="c-str">"""
+You are a financial analyst.
+First, think step-by-step about the user's data in &lt;thinking&gt; tags.
+Then, output the final answer in JSON.
+
+User Data: "Revenue was up 10% but margins dropped due to supply chain."
+"""</span></code></pre>
+
+          <h2>3. Theory: XML Delimiters</h2>
+          <p>
+            When injecting user data into a prompt, always wrap it in XML tags.
+            This prevents the model from confusing instructions with data.
+          </p>
+          <div class="grid">
+            <div
+              style="
+                padding: 1rem;
+                border: 1px solid #fee2e2;
+                background: #fff5f5;
+                border-radius: 8px;
+              "
+            >
+              <strong>❌ Bad Prompt</strong><br />
+              <small>Summarize this: [User Input]</small>
+            </div>
+            <div
+              style="
+                padding: 1rem;
+                border: 1px solid #d1fae5;
+                background: #ecfdf5;
+                border-radius: 8px;
+              "
+            >
+              <strong>✅ Good Prompt</strong><br />
+              <small
+                >Summarize the text inside &lt;text&gt; tags.<br />&lt;text&gt;[User
+                Input]&lt;/text&gt;</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="rag" class="tab-content">
+        <div class="container">
+          <h1>RAG (Retrieval Augmented Generation)</h1>
+          <p>
+            RAG connects the LLM to knowledge it wasn't trained on (like our
+            Hackathon data).
+          </p>
+
+          <div>
+            <a
+              href="https://python.langchain.com/docs/tutorials/rag/"
+              target="_blank"
+              class="resource-link"
+              >📚 LangChain RAG Tutorial</a
+            >
+            <a
+              href="https://www.youtube.com/watch?v=wd7TZ4w1mSw"
+              target="_blank"
+              class="resource-link"
+              >🎥 Visual Explanation (YouTube)</a
+            >
+          </div>
+
+          <h2>The Concept</h2>
+          <p>
+            The "Context Window" is limited. We can't paste 1,000 PDFs into a
+            prompt. Instead, we:
+          </p>
+          <ol
+            style="
+              margin-left: 1.5rem;
+              margin-bottom: 1.5rem;
+              color: var(--secondary);
+            "
+          >
+            <li>
+              <b>Chunk:</b> Break text into small pieces (e.g., 500 words).
+            </li>
+            <li>
+              <b>Embed:</b> Turn text into numbers (Vectors) that represent
+              meaning.
+            </li>
+            <li>
+              <b>Store:</b> Save these in a Vector Database (Chroma/FAISS).
+            </li>
+            <li>
+              <b>Retrieve:</b> When a user asks a question, find the top 3
+              similar chunks and send <i>only those</i> to the LLM.
+            </li>
+          </ol>
+
+          <h2>Implementation Code</h2>
+          <pre><code class="language-python"><span class="c-cmt"># 1. Load & Chunk the PDF/Text</span>
+<span class="c-kw">from</span> langchain_text_splitters <span class="c-kw">import</span> RecursiveCharacterTextSplitter
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,  <span class="c-cmt"># Characters per chunk</span>
+    chunk_overlap=200 <span class="c-cmt"># Overlap ensures context isn't cut in the middle of a sentence</span>
+)
+splits = text_splitter.split_documents(docs)
+
+<span class="c-cmt"># 2. Vector Store (The Memory)</span>
+<span class="c-kw">from</span> langchain_chroma <span class="c-kw">import</span> Chroma
+<span class="c-kw">from</span> langchain_openai <span class="c-kw">import</span> OpenAIEmbeddings
+
+<span class="c-cmt"># Use the same client config for embeddings if needed</span>
+vectorstore = Chroma.from_documents(
+    documents=splits, 
+    embedding=OpenAIEmbeddings(api_key=<span class="c-str">"..."</span>)
+)
+
+<span class="c-cmt"># 3. Retrieval Chain</span>
+retriever = vectorstore.as_retriever(search_kwargs={<span class="c-str">"k"</span>: 3}) <span class="c-cmt"># Get top 3 chunks</span>
+relevant_docs = retriever.invoke(<span class="c-str">"What was the Q3 revenue?"</span>)</code></pre>
+        </div>
+      </div>
+
+      <div id="langgraph" class="tab-content">
+        <div class="container">
+          <h1>LangGraph (Agents)</h1>
+          <p>
+            Standard chains are linear (A → B → C). Agents are loops (Think →
+            Act → Observe → Loop).
+          </p>
+
+          <div>
+            <a
+              href="https://langchain-ai.github.io/langgraph/"
+              target="_blank"
+              class="resource-link"
+              >📚 Official LangGraph Docs</a
+            >
+          </div>
+
+          <h2>Why use it?</h2>
+          <p>
+            In our hackathon, if the LLM generates bad code or misses a
+            financial metric, a linear chain fails. An Agent can "see" the error
+            and try again automatically.
+          </p>
+
+          <h2>The "State" Concept</h2>
+          <p>
+            LangGraph passes a <code>State</code> object between functions. It's
+            like a shared whiteboard.
+          </p>
+
+          <pre><code class="language-python"><span class="c-kw">from</span> langgraph.graph <span class="c-kw">import</span> StateGraph, END
+<span class="c-kw">from</span> typing <span class="c-kw">import</span> TypedDict, List
+
+<span class="c-cmt"># 1. Define the Memory (State)</span>
+<span class="c-kw">class</span> <span class="c-cls">AgentState</span>(TypedDict):
+    messages: List[str]
+    transcript: str
+    summary_draft: str
+
+<span class="c-cmt"># 2. Define Nodes (The Workers)</span>
+<span class="c-kw">def</span> <span class="c-fn">summarizer_node</span>(state):
+    <span class="c-cmt"># Logic to summarize transcript</span>
+    new_summary = llm.invoke(f"Summarize: {state['transcript']}")
+    <span class="c-kw">return</span> {<span class="c-str">"summary_draft"</span>: new_summary.content}
+
+<span class="c-kw">def</span> <span class="c-fn">critic_node</span>(state):
+    <span class="c-cmt"># Logic to check if summary has numbers</span>
+    <span class="c-kw">if</span> <span class="c-str">"$"</span> <span class="c-kw">not in</span> state[<span class="c-str">"summary_draft"</span>]:
+        <span class="c-kw">return</span> {<span class="c-str">"messages"</span>: [<span class="c-str">"Error: Missing financial data"</span>]}
+    <span class="c-kw">return</span> {<span class="c-str">"messages"</span>: [<span class="c-str">"Approved"</span>]}
+
+<span class="c-cmt"># 3. Build Graph</span>
+workflow = StateGraph(AgentState)
+workflow.add_node(<span class="c-str">"summarize"</span>, summarizer_node)
+workflow.add_node(<span class="c-str">"critic"</span>, critic_node)
+workflow.set_entry_point(<span class="c-str">"summarize"</span>)
+workflow.add_edge(<span class="c-str">"summarize"</span>, <span class="c-str">"critic"</span>)
+</code></pre>
+        </div>
+      </div>
+
+      <div id="solution" class="tab-content">
+        <div class="container">
+          <span
+            class="badge"
+            style="
+              background: #dbeafe;
+              color: #1e40af;
+              padding: 4px 8px;
+              border-radius: 4px;
+              font-size: 0.8rem;
+              font-weight: bold;
+            "
+            >SYSTEM DESIGN</span
+          >
+          <h1>Example: Earnings Call Agent</h1>
+          <p>
+            <b>Problem:</b> Earnings transcripts are long. Analysts need
+            structured summaries (Financials, Risks, Q&A) exported to PDF.
+          </p>
+
+          <h2>1. The Architecture (Mental Model)</h2>
+          <div class="system-diagram">
+            Input (PDF) <br />
+            ↓ <br />
+            [Ingestion Pipeline] → (Clean & Chunk) → [Vector DB (RAG)]<br />
+            ↓ <br />
+            [Orchestrator Agent (LangGraph)]<br />
+            ↙ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↓
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↘
+            <br />
+            [Metric Extractor] &nbsp; [Risk Analyzer] &nbsp; [Q&A Summarizer]<br />
+            (Tool: Search DB) &nbsp; (Tool: Sentiment) &nbsp; (Tool: Search
+            DB)<br />
+            ↘ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↓
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↙
+            <br />
+            [Report Compiler] → Output (DOCX/JSON)
+          </div>
+
+          <h2>2. Where we use each concept</h2>
+          <div class="grid">
+            <div class="card" style="cursor: default">
+              <div class="card-title">Ingestion (RAG)</div>
+              <p class="card-desc">
+                The transcript is 50 pages. We <b>Embed</b> it into ChromaDB so
+                the agent can query specific questions like "What was the
+                guidance for 2027?" without reading the whole file every time.
+              </p>
+            </div>
+            <div class="card" style="cursor: default">
+              <div class="card-title">Extraction (Prompting)</div>
+              <p class="card-desc">
+                We use <b>Structured Output (JSON)</b> prompting. We tell the
+                model: "Extract revenue, EPS, and margins. Return JSON:
+                <code>{ 'revenue': '10M', 'eps': '1.2' }</code>".
+              </p>
+            </div>
+            <div class="card" style="cursor: default">
+              <div class="card-title">Workflow (LangGraph)</div>
+              <p class="card-desc">
+                We use a graph. If the "Metric Extractor" returns empty fields,
+                the graph loops back to a "Search Tool" to try finding the
+                numbers in a different section of the text.
+              </p>
+            </div>
+          </div>
+
+          <h2>3. Solution Code Skeleton</h2>
+          <p>
+            This is how we wire the DeepSeek model into an extraction chain.
+          </p>
+
+          <pre><code class="language-python"><span class="c-kw">from</span> langchain_core.prompts <span class="c-kw">import</span> ChatPromptTemplate
+<span class="c-kw">from</span> langchain_core.output_parsers <span class="c-kw">import</span> JsonOutputParser
+
+<span class="c-cmt"># 1. Setup the Model (Using your specific DeepSeek config)</span>
+llm = ChatOpenAI(
+    base_url=<span class="c-str">YOUR URL</span>,
+    model=<span class="c-str">YOUR MODEL NAME</span>,
+    api_key=<span class="c-str">"YOUR_KEY"</span>,
+    http_client=client
+)
+
+<span class="c-cmt"># 2. Define the Prompt (The "Prompt Engineering" Part)</span>
+<span class="c-cmt"># Notice the clear instructions and JSON requirement</span>
+parser = JsonOutputParser()
+prompt = ChatPromptTemplate.from_template(
+    <span class="c-str">"""
+    You are a financial analyst helper.
+    Extract the following metrics from the context provided:
+    - Revenue
+    - Net Income
+    - Risks mentioned
+
+    Context: {context}
+
+    {format_instructions}
+    """</span>
+)
+
+<span class="c-cmt"># 3. Create the Chain</span>
+chain = prompt | llm | parser
+
+<span class="c-cmt"># 4. Run it</span>
+<span class="c-cmt"># In a real app, 'context' comes from our RAG retrieval step</span>
+response = chain.invoke({
+    <span class="c-str">"context"</span>: <span class="c-str">"Q3 Revenue was $50B. Risks include FX rates."</span>,
+    <span class="c-str">"format_instructions"</span>: parser.get_format_instructions()
+})
+
+<span class="c-fn">print</span>(response)
+<span class="c-cmt"># Output: {'Revenue': '$50B', 'Risks': 'FX rates', ...}</span>
+</code></pre>
+
+          <div class="box box-warn">
+            <strong>Hackathon Tip:</strong> Do not try to generate the DOCX/PDF
+            directly with the LLM. It's unreliable. Instead, use the LLM to
+            generate <b>Markdown</b> or <b>JSON</b>, and then use a standard
+            Python library (like <code>python-docx</code>) to convert that data
+            into a pretty document.
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function openTab(tabId) {
+        // Hide all contents
+        const contents = document.querySelectorAll(".tab-content");
+        contents.forEach((content) => content.classList.remove("active"));
+
+        // Deactivate all buttons
+        const buttons = document.querySelectorAll(".tab-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        // Activate specific tab and button
+        document.getElementById(tabId).classList.add("active");
+
+        // Find the button that calls this function and highlight it
+        // (Includes handling the clickable cards on home page)
+        const allButtons = Array.from(buttons);
+        const matchingBtn = allButtons.find((btn) =>
+          btn.getAttribute("onclick").includes(tabId),
+        );
+        if (matchingBtn) matchingBtn.classList.add("active");
+
+        // Scroll to top
+        document.querySelector("main").scrollTop = 0;
+      }
+    </script>
+  </body>
+</html>
