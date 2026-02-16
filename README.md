@@ -1,4 +1,3 @@
-<title>README.md</title>
 <markdown>
 
 # 🚀 AI Hackathon Quick Guide
@@ -49,6 +48,3 @@ Your site will be live at `https://<user>.github.io/<repo>/` in roughly 1 minute
 
 If you find a better code pattern during the hackathon, edit `index.html` directly and push the changes.
 </markdown>
-<thoughts>
-I kept the README focused on "Speed to Value." Since this is a hackathon resource, the team doesn't want to read a novel; they just need to know how to get the site up and what's inside. I added a placeholder for the "Live Site" link which is a common best practice for GitHub Pages repos.
-</thoughts>
